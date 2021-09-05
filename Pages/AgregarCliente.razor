@@ -1,0 +1,65 @@
+﻿@page "/AgregarCliente"
+
+@using hade_database.Data.Model
+@using hade_database.Data.Service
+
+@inject IClienteService IClienteService
+@inject NavigationManager NavigationManager
+
+
+
+<h1>Añadir Usuario</h1>
+
+<EditForm Model="@cliente" OnValidSubmit="@ClienteInsert">
+    <table>
+        <tr>
+            <td>Código:</td>
+            <td><input type="text" @bind="cliente.dniCliente" /></td>
+        </tr>
+        <tr>
+            <td>Nombre:</td>
+            <td><input type="text" @bind="cliente.nombreCliente" /></td>
+        </tr>
+        <tr>
+            <td>Apellido:</td>
+            <td><input type="text" @bind="cliente.apellidoCliente" /></td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td><input type="text" @bind="cliente.correoCliente" /></td>
+        </tr>
+        <tr>
+            <td>Direccion:</td>
+            <td><input type="text" @bind="cliente.direccionCliente" /></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Adicionar" />
+                <input type="button" value="Cancelar" @onclick="@Cancel" />
+            </td>
+        </tr>
+
+    </table>
+
+</EditForm>
+
+@code {
+
+    Cliente cliente = new Cliente();
+
+    protected async Task ClienteInsert()
+    {
+        if (cliente.dniCliente != null && cliente.nombreCliente != null && cliente.apellidoCliente != null && cliente.correoCliente != null && cliente.direccionCliente != null)
+        {
+            await IClienteService.ClienteInsert(cliente);
+            NavigationManager.NavigateTo("/");
+        }
+
+
+    }
+
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}
